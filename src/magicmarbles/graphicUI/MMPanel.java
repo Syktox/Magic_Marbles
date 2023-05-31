@@ -65,8 +65,8 @@ public class MMPanel extends JPanel {
             int[] tmp = PixelHelper.convertPixelToIndex(e.getX(), e.getY());
             try {
                 model.select(tmp[0], tmp[1]);
-            } catch (Exception ex) {
-                System.out.println(ex.getMessage());
+            } catch (Exception ignored) {
+
             }
         }
     }

@@ -93,44 +93,47 @@ public class MMGameImpl implements MMGame {
 
 	@Override
 	public void select(int row, int col) throws MMException {
-		deleteEelements(col, row);
+		MMFieldState temp = field[row][col];
+		int value=deleteEelements(col, row);
+		if (value == 1) {
+			field[row][col]=temp;
+			throw new MMException("f");
+		}
+		scoredpoints = value;
 		gravityOnMarbles();
 		moveRight();
 	}
 
-	private void deleteEelements(int row,int col) throws MMException {
+	private int deleteEelements(int row,int col) throws MMException {
 		MMFieldState value = field[row][col];
+		field[row][col] = MMFieldState.EMPTY;
+		int temp=1;
 
 		if (value == MMFieldState.EMPTY) {
-			throw new MMException();
+			throw new MMException("l");
 		}
 
-		if (field[row][col] == value) {
-			field[row][col] = MMFieldState.EMPTY;
-			scoredpoints += 1;
-		} else {
-			return;
-		}
 		if (row > 0) {
 			if (field[row - 1][col] == value) {
-				deleteEelements(row - 1, col);
+				temp += deleteEelements(row - 1, col);
 			}
 		}
 		if (row < width - 1) {
 			if (field[row + 1][col] == value) {
-				deleteEelements(row + 1, col);
+				temp +=  deleteEelements(row + 1, col);
 			}
 		}
 		if (col > 0) {
 			if (field[row][col - 1] == value) {
-				deleteEelements(row, col - 1);
+				temp += deleteEelements(row, col - 1);
 			}
 		}
 		if (col < height - 1) {
 			if (field[row][col + 1] == value) {
-				deleteEelements(row, col + 1);
+				temp += deleteEelements(row, col + 1);
 			}
 		}
+		return temp;
 	}
 	private void gravityOnMarbles() {
 		for (int row = 0; row < height; row++) {
