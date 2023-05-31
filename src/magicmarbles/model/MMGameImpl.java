@@ -98,9 +98,14 @@ public class MMGameImpl implements MMGame {
 		moveRight();
 	}
 
-	private void deleteEelements(int row,int col) {
+	private void deleteEelements(int row,int col) throws MMException {
 		MMFieldState value = field[row][col];
-		if (field[row][col] == value && value != MMFieldState.EMPTY) {
+
+		if (value == MMFieldState.EMPTY) {
+			throw new MMException();
+		}
+
+		if (field[row][col] == value) {
 			field[row][col] = MMFieldState.EMPTY;
 			scoredpoints += 1;
 		} else {
@@ -143,11 +148,11 @@ public class MMGameImpl implements MMGame {
 	private void moveRight() {
 		for (int col = getWidth() - 1; col >= 0; col--) {
 			if (getFieldState(getHeight() - 1, col) == MMFieldState.EMPTY) {
-				for (int row = col - 1; row >= 0; row--) {
-					if (getFieldState(getHeight() - 1, row) != MMFieldState.EMPTY) {
-						for (int i = 0; i < getHeight(); i++) {
-							setFieldState(i, col, getFieldState(i, row));
-							setFieldState(i, row, MMFieldState.EMPTY);
+				for (int runningIndex = col - 1; runningIndex >= 0; runningIndex--) {
+					if (getFieldState(getHeight() - 1, runningIndex) != MMFieldState.EMPTY) {
+						for (int row = 0; row < getHeight(); row++) {
+							setFieldState(row, col, getFieldState(row, runningIndex));
+							setFieldState(row, runningIndex, MMFieldState.EMPTY);
 						}
 						break;
 					}
@@ -155,4 +160,5 @@ public class MMGameImpl implements MMGame {
 			}
 		}
 	}
+
 }

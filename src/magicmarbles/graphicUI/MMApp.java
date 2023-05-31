@@ -91,6 +91,21 @@ public class MMApp {
         model.fireChangeEvent();
     }
 
+    public void reset(int width, int height) {
+        model.reset(width, height);
+        frame.remove(paintPanel);
+        paintPanel = createPaintPanel();
+        paintPanel.setPlayground();
+        frame.add(paintPanel);
+        frame.setVisible(false);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        paintPanel.repaint();
+        frame.repaint();
+        frame.setVisible(true);
+        model.fireChangeEvent();
+    }
+
     public void updatePoints(int p) {
         points.setText("Points: " + p);
     }
@@ -98,6 +113,15 @@ public class MMApp {
     private JMenuBar createMenu() {
         JMenuBar menuBar = new JMenuBar();
         JMenu menu = new JMenu("File");
+        JMenuItem refresh = new JMenuItem("Refresh");
+        JMenu credits = new JMenu("Credits");
+        JMenuItem creditsItem = new JMenuItem("Made By Markus Kammerstetter");
+        refresh.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                reset(width, height);
+            }
+        });
         JMenuItem newItem = new JMenuItem("New", 'N');
         newItem.addActionListener(new ActionListener(){
             @Override
@@ -114,7 +138,10 @@ public class MMApp {
         });
         menu.add(newItem);
         menu.add(exitItem);
+        credits.add(creditsItem);
         menuBar.add(menu);
+        menuBar.add(refresh);
+        menuBar.add(credits);
         return menuBar;
     }
 

@@ -37,6 +37,7 @@ public class MMPanel extends JPanel {
                 g.fillRect(col * diameter, row * diameter, diameter, diameter);
 
                 MMFieldState tmp = model.game.getFieldState(row, col);
+
                 if (tmp == MMFieldState.BLUE) {
                     g.setColor(Color.BLUE);
                 } else if (tmp == MMFieldState.GREEN) {
